@@ -1,10 +1,8 @@
-# IIIF Volume Segmenter v2
+# IIIF Volume Segmenter
 
-IIIFマニフェストから画像を解析し、カバースキャン（表紙）とコンテンツ（本文）を自動で判別・セグメンテーションするためのツールセットです。
+IIIFマニフェストから表紙の自動判別を行い、strucuturesプロパティを用いたIIIFマニフェストの分割を行います。
 
 ## 構成
-
-このプロジェクトは以下の2つの主要なコンポーネントで構成されています。
 
 1.  **Web Application (`src/`)**: React + TypeScript + Vite を使用したフロントエンド。ONNX Runtime Web を使用してブラウザ上で推論を実行します。
     -   デプロイ先: [https://sseki27skt.github.io/i-i-i-f/](https://sseki27skt.github.io/i-i-i-f/)
