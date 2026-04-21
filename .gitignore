@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+dist/
+
+# Python / ML
+__pycache__/
+.venv/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints
+ml/dataset/
+ml/models/*.pth
+ml/reports/
+!ml/reports/.gitkeep
+ml/Archive/
+
+# Temporary files
+scratch/
+*.log
+.DS_Store
+Thumbs.db
+
+# Environments / Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo

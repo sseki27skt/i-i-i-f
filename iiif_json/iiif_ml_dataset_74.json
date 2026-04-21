@@ -1,0 +1,477 @@
+[
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/1",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0001.tif/full/full/0/default.jpg",
+    "label": "cover"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/2",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0002.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/3",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0003.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/4",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0004.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/5",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0005.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/6",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0006.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/7",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0007.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/8",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0008.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/9",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0009.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/10",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0010.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/11",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0011.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/12",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0012.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/13",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0013.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/14",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0014.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/15",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0015.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/16",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0016.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/17",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0017.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/18",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0018.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/19",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0019.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/20",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0020.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/21",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0021.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/22",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0022.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/23",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0023.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/24",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0024.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/25",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0025.tif/full/full/0/default.jpg",
+    "label": "cover"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/26",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0026.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/27",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0027.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/28",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0028.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/29",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0029.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/30",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0030.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/31",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0031.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/32",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0032.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/33",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0033.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/34",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0034.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/35",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0035.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/36",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0036.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/37",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0037.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/38",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0038.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/39",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0039.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/40",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0040.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/41",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0041.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/42",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0042.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/43",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0043.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/44",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0044.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/45",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0045.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/46",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0046.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/47",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0047.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/48",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0048.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/49",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0049.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/50",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0050.tif/full/full/0/default.jpg",
+    "label": "cover"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/51",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0051.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/52",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0052.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/53",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0053.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/54",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0054.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/55",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0055.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/56",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0056.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/57",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0057.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/58",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0058.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/59",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0059.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/60",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0060.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/61",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0061.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/62",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0062.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/63",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0063.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/64",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0064.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/65",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0065.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/66",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0066.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/67",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0067.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/68",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0068.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/69",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0069.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/70",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0070.tif/full/full/0/default.jpg",
+    "label": "cover"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/71",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0071.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/72",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0072.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/73",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0073.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/74",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0074.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/75",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0075.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/76",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0076.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/77",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0077.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/78",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0078.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/79",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0079.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/80",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0080.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/81",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0081.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/82",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0082.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/83",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0083.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/84",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0084.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/85",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0085.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/86",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0086.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/87",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0087.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/88",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0088.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/89",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0089.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/90",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0090.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/91",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0091.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/92",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0092.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/93",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0093.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/94",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0094.tif/full/full/0/default.jpg",
+    "label": "content"
+  },
+  {
+    "id": "https://kokusho.nijl.ac.jp/biblio/300011520/canvas/95",
+    "imageUrl": "https://kokusho.nijl.ac.jp/api/iiif/300011520/v4/HRSK/HRSK-00328/HRSK-00328-0095.tif/full/full/0/default.jpg",
+    "label": "content"
+  }
+]
