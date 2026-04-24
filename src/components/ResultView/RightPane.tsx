@@ -195,7 +195,7 @@ export function RightPane() {
           onClick={handleExportTrainingData}
         >
           <Database className="w-4 h-4" />
-          学習用データ出力 (JSON)
+          Export Training Data (JSON)
         </button>
       </div>
     </div>
