@@ -22,6 +22,10 @@ let cancelled = false
 const prefetchMap = new Map<number, Promise<Float32Array>>()
 const MAX_PREFETCH_COUNT = 32 // 先読みする最大枚数
 
+// ─────────────── 前処理用リソース ───────────────
+let offscreenCanvas: OffscreenCanvas | null = null
+let offscreenCtx: OffscreenCanvasRenderingContext2D | null = null
+
 // ─────────────── 前処理 ───────────────
 
 const IMAGENET_MEAN = [0.485, 0.456, 0.406]
@@ -38,8 +42,12 @@ async function preprocessImage(
   const blob = new Blob([buffer])
   const bitmap = await createImageBitmap(blob)
 
-  const canvas = new OffscreenCanvas(inputSize, inputSize)
-  const ctx = canvas.getContext('2d')!
+  if (!offscreenCanvas || offscreenCanvas.width !== inputSize) {
+    offscreenCanvas = new OffscreenCanvas(inputSize, inputSize)
+    offscreenCtx = offscreenCanvas.getContext('2d', { willReadFrequently: true })
+  }
+  
+  const ctx = offscreenCtx!
   ctx.drawImage(bitmap, 0, 0, inputSize, inputSize)
   bitmap.close()
 
@@ -47,13 +55,19 @@ async function preprocessImage(
   const pixels = inputSize * inputSize
   const tensor = new Float32Array(3 * pixels)
 
+  // ループ内の計算を最小化するための定数
+  const rNorm = 1 / (255 * IMAGENET_STD[0])
+  const gNorm = 1 / (255 * IMAGENET_STD[1])
+  const bNorm = 1 / (255 * IMAGENET_STD[2])
+  const rOffset = -IMAGENET_MEAN[0] / IMAGENET_STD[0]
+  const gOffset = -IMAGENET_MEAN[1] / IMAGENET_STD[1]
+  const bOffset = -IMAGENET_MEAN[2] / IMAGENET_STD[2]
+
   for (let i = 0; i < pixels; i++) {
-    const r = data[i * 4]     / 255
-    const g = data[i * 4 + 1] / 255
-    const b = data[i * 4 + 2] / 255
-    tensor[i]               = (r - IMAGENET_MEAN[0]) / IMAGENET_STD[0]
-    tensor[pixels + i]      = (g - IMAGENET_MEAN[1]) / IMAGENET_STD[1]
-    tensor[pixels * 2 + i]  = (b - IMAGENET_MEAN[2]) / IMAGENET_STD[2]
+    const i4 = i * 4
+    tensor[i]              = data[i4]     * rNorm + rOffset
+    tensor[pixels + i]     = data[i4 + 1] * gNorm + gOffset
+    tensor[pixels * 2 + i] = data[i4 + 2] * bNorm + bOffset
   }
   return tensor
 }

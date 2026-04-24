@@ -34,3 +34,9 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Docs
+docs/
+
+# History
+.history/

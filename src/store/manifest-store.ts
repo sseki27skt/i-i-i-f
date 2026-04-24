@@ -40,6 +40,7 @@ interface ManifestState {
   inferenceCompletedCount: number
   inferenceError: string | null
   setInferenceResult: (result: InferenceResult) => void
+  addInferenceResults: (results: InferenceResult[]) => void
   setInferenceResults: (results: InferenceResult[]) => void
   setInferenceStatus: (status: InferenceStatus) => void
   setInferenceProgress: (progress: number, completed?: number, total?: number) => void
@@ -175,6 +176,15 @@ export const useManifestStore = create<ManifestState>((set, get) => ({
     set((state) => {
       const next = new Map(state.inferenceResults)
       next.set(canvasIndex, confidence)
+      return { inferenceResults: next }
+    }),
+
+  addInferenceResults: (results: InferenceResult[]) =>
+    set((state) => {
+      const next = new Map(state.inferenceResults)
+      for (const r of results) {
+        next.set(r.canvasIndex, r.confidence)
+      }
       return { inferenceResults: next }
     }),
 

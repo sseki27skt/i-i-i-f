@@ -132,7 +132,10 @@ export function AnalysisSettings() {
 
     await new Promise<void>((resolve) => {
       const originalOnMessages = workersRef.current.map(w => w.onmessage)
-      
+      const resultBuffer: { canvasIndex: number; confidence: number }[] = []
+      const BATCH_UPDATE_SIZE = 12
+      let lastUpdateTime = performance.now()
+
       workersRef.current.forEach(worker => {
         worker.onmessage = (e: MessageEvent<WorkerOutMessage>) => {
           if (isAborted()) {
@@ -143,9 +146,17 @@ export function AnalysisSettings() {
 
           const msg = e.data
           if (msg.type === 'INFERENCE_RESULT') {
-            setInferenceResult({ canvasIndex: msg.canvasIndex, confidence: msg.confidence })
+            resultBuffer.push({ canvasIndex: msg.canvasIndex, confidence: msg.confidence })
             completed++
-            setInferenceProgress(Math.round((completed / total) * 100), completed, total)
+
+            const now = performance.now()
+            if (resultBuffer.length >= BATCH_UPDATE_SIZE || now - lastUpdateTime > 200 || completed >= total) {
+              useManifestStore.getState().addInferenceResults([...resultBuffer])
+              resultBuffer.length = 0
+              lastUpdateTime = now
+              setInferenceProgress(Math.round((completed / total) * 100), completed, total)
+            }
+
             if (completed >= total) {
               const duration = performance.now() - inferenceStartTime
               const avgLatency = duration / total
@@ -156,9 +167,15 @@ export function AnalysisSettings() {
             }
           } else if (msg.type === 'INFERENCE_ERROR') {
             console.error('Inference error', msg.canvasIndex, msg.error)
-            setInferenceResult({ canvasIndex: msg.canvasIndex, confidence: 0 })
+            resultBuffer.push({ canvasIndex: msg.canvasIndex, confidence: 0 })
             completed++
-            setInferenceProgress(Math.round((completed / total) * 100), completed, total)
+            
+            if (resultBuffer.length >= BATCH_UPDATE_SIZE || completed >= total) {
+              useManifestStore.getState().addInferenceResults([...resultBuffer])
+              resultBuffer.length = 0
+              setInferenceProgress(Math.round((completed / total) * 100), completed, total)
+            }
+
             if (completed >= total) {
               const duration = performance.now() - inferenceStartTime
               const avgLatency = duration / total
