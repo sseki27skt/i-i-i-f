@@ -7,9 +7,9 @@
  */
 
 import { useState } from 'react'
-import { Download, FileJson, Edit3, ChevronRight, Copy, Check } from 'lucide-react'
+import { Download, FileJson, Edit3, ChevronRight, Copy, Check, Database } from 'lucide-react'
 import { useManifestStore } from '@/store/manifest-store'
-import { downloadManifest, copyManifestToClipboard } from '@/lib/iiif-exporter'
+import { downloadManifest, copyManifestToClipboard, downloadTrainingDataJson } from '@/lib/iiif-exporter'
 import type { ExportVersion } from '@/types/app'
 
 export function RightPane() {
@@ -41,6 +41,11 @@ export function RightPane() {
   const handleExport = () => {
     if (!manifest || detectedCovers.length === 0) return
     downloadManifest(manifest, detectedCovers, exportVersion, exportLanguage)
+  }
+
+  const handleExportTrainingData = () => {
+    if (!manifest || detectedCovers.length === 0) return
+    downloadTrainingDataJson(manifest, detectedCovers)
   }
 
   const handleCopy = async () => {
@@ -182,6 +187,16 @@ export function RightPane() {
             {copied ? 'Copied!' : 'Copy'}
           </button>
         </div>
+
+        {/* 学習データエクスポート */}
+        <button
+          id="export-training-data-btn"
+          className="btn-outline w-full py-1.5 border-dashed border-primary-500/50 hover:border-primary-500 text-primary-600 dark:text-primary-400"
+          onClick={handleExportTrainingData}
+        >
+          <Database className="w-4 h-4" />
+          学習用データ出力 (JSON)
+        </button>
       </div>
     </div>
   )

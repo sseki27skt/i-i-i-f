@@ -279,3 +279,37 @@ export async function copyManifestToClipboard(
   const json = JSON.stringify(exported, null, 2)
   await navigator.clipboard.writeText(json)
 }
+/**
+ * 内部状態から学習データ用 JSON (iiif_ml_dataset 形式) を生成し、ダウンロードを起動する。
+ */
+export function downloadTrainingDataJson(
+  manifest: NormalizedManifest,
+  covers: DetectedCover[],
+): void {
+  const coverIndices = new Set(covers.map((c) => c.canvasIndex))
+
+  const dataset = manifest.canvases.map((canvas) => {
+    // 画像URLの構築 (Image Service がある場合はフルサイズ、ない場合はそのまま)
+    const imageUrl = canvas.imageServiceUrl
+      ? `${canvas.imageServiceUrl.replace(/\/$/, '')}/full/full/0/default.jpg`
+      : canvas.thumbnailUrl
+
+    return {
+      id: canvas.id,
+      imageUrl,
+      label: coverIndices.has(canvas.index) ? 'cover' : 'content',
+    }
+  })
+
+  const json = JSON.stringify(dataset, null, 2)
+  const blob = new Blob([json], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `i-i-i-f_ml_dataset.json`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
