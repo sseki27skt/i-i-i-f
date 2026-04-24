@@ -125,7 +125,7 @@ function triggerPrefetch() {
  * 個別の画像をフェッチ・前処理して Promise を返す
  */
 async function prefetchItem(item: { canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string }): Promise<Float32Array> {
-  const config = currentModelId ? MODEL_CONFIGS[currentModelId] : MODEL_CONFIGS['mobilenet_v3_large']
+  const config = currentModelId ? MODEL_CONFIGS[currentModelId] : MODEL_CONFIGS['mobilenet_v2']
   const inputSize = config.inputSize
 
   let data = item.imageData

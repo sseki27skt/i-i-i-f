@@ -65,7 +65,9 @@ export function AnalysisSettings() {
       }
 
       // 初期モデルをバックグラウンドでプリロード
-      worker.postMessage({ type: 'LOAD_MODEL', modelId: 'mobilenet_v3_large' } as WorkerInMessage)
+      const initialMode = useManifestStore.getState().inferenceMode
+      const modelToLoad = initialMode === 'ensemble' ? 'mobilenet_v2' : initialMode as ModelId
+      worker.postMessage({ type: 'LOAD_MODEL', modelId: modelToLoad } as WorkerInMessage)
       workers.push(worker)
     }
     workersRef.current = workers
