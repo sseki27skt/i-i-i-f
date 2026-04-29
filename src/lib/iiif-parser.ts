@@ -45,7 +45,7 @@ function parseV2Canvas(canvas: IiifV2Canvas, index: number): NormalizedCanvas {
   const id = canvas['@id']
 
   // ラベル
-  let label = typeof canvas.label === 'string'
+  const label = typeof canvas.label === 'string'
     ? canvas.label
     : String(index + 1)
 
