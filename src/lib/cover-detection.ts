@@ -5,7 +5,7 @@
  *
  * アルゴリズム:
  *   1. 末尾 tailExclude コマを除外（デフォルト: 2）
- *   2. 上位 topPercentile% の Confidence 値を候補母集団として抽出
+ *   2. 上位 topPercentile% の Confidence 値を候補母集団として抽出（ただし150コマ未満の場合は全コマを対象とする）
  *   3. 候補をソートし以下のいずれかで閾値決定:
  *      - max-gap:   最大 Gap 法
  *      - kmeans:    1D K-means (k=2)
@@ -164,8 +164,16 @@ function firstGapThreshold(sortedArr: number[], minGap = 0.05): number {
   } else {
     // 自動閾値決定ロジック
     const allConfs = sortedAsc(eligible.map((r) => r.confidence))
-    const threshold90 = percentile(allConfs, topPercentile)
-    const topCandidates = eligible.filter((r) => r.confidence >= threshold90)
+    
+    let topCandidates: InferenceResult[]
+    if (totalCanvases < 150) {
+      // 150コマ未満の場合は、全コマを候補として閾値探索を行う
+      topCandidates = eligible
+    } else {
+      // 150コマ以上の場合は、上位 topPercentile% を候補母集団とする
+      const threshold90 = percentile(allConfs, topPercentile)
+      topCandidates = eligible.filter((r) => r.confidence >= threshold90)
+    }
 
     if (topCandidates.length === 0) return { covers: [], threshold: 0 }
     if (topCandidates.length === 1) {
