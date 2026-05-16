@@ -4,12 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "npm run setup-uv && vite",
+    "build": "npm run setup-uv && tsc -b && vite build",
+    "setup-uv": "mkdir -p public/viewer/uv && cp -R node_modules/universalviewer/dist/* public/viewer/uv/ || echo 'UV setup skipped'",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "universalviewer": "^3.1.2",
     "lucide-react": "^0.577.0",
     "onnxruntime-web": "^1.24.3",
     "react": "^19.2.4",

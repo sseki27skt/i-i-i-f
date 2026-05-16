@@ -4,7 +4,7 @@
  * 表紙候補（DetectedCover）に基づき structures (Range) を付与したマニフェストを生成する。
  */
 
-import type { NormalizedManifest, DetectedCover } from '@/types/app'
+import type { NormalizedManifest, NormalizedCanvas, DetectedCover } from '@/types/app'
 import type { ExportVersion, ExportLanguage } from '@/types/app'
 import type {
   IiifV2Manifest, IiifV2Range,
@@ -17,11 +17,11 @@ import type {
 /**
  * 任意のオブジェクトを強制的に IIIF V3 形式（Language Map 等）に補正する。
  * 元が V2 の場合、@id -> id, @type -> type などの変換も行う。
+ * 確実に全コマのサムネイルが表示されるよう、正規化されたデータ (NormalizedCanvas) を優先的に使用する。
  */
-function ensureV3(raw: any, lang: string): IiifV3Manifest {
+function ensureV3(raw: any, lang: string, normalizedCanvases?: NormalizedCanvas[]): IiifV3Manifest {
   const toLangMap = (val: any): LanguageMap => {
     if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
-      // すでにオブジェクトならそのまま（簡易判定）
       return val as LanguageMap
     }
     const str = typeof val === 'string' ? val : String(val ?? '')
@@ -29,9 +29,13 @@ function ensureV3(raw: any, lang: string): IiifV3Manifest {
     return { [key]: [str] }
   }
 
+  // マニフェスト ID にサフィックスを付けて、ビューワーのキャッシュを回避する
+  const baseId = raw.id || raw['@id'] || 'http://example.org/iiif/manifest';
+  const manifestId = baseId.includes('#') ? baseId : `${baseId}#segmented-${Date.now()}`;
+
   const result: any = {
     '@context': 'http://iiif.io/api/presentation/3/context.json',
-    id: raw.id || raw['@id'] || 'http://example.org/iiif/manifest',
+    id: manifestId,
     type: 'Manifest',
     label: toLangMap(raw.label || 'Untitled'),
   }
@@ -50,18 +54,13 @@ function ensureV3(raw: any, lang: string): IiifV3Manifest {
   }
 
   // 権利情報・帰属
-  // V3 の rights は CC か RightsStatements の URI のみ許可される
   const attribution = raw.attribution || (raw.requiredStatement?.value);
   let rightsVal = raw.rights || raw.license;
 
   if (typeof rightsVal === 'string') {
-    // Creative Commons の正規化
     if (rightsVal.includes('creativecommons.org/licenses/')) {
-      // バリデータの期待する形式 (http 且つ /deed などのサフィックスなし) に補正
       rightsVal = rightsVal.replace('https://', 'http://');
-      // /deed.ja, /deed.en, /legalcode 等のサフィックスを除去
       rightsVal = rightsVal.replace(/\/(deed|legalcode)(\.[a-z]{2})?(\/?)?$/, '/');
-      // 末尾の / を保証
       if (!rightsVal.endsWith('/')) rightsVal += '/';
     }
   }
@@ -85,62 +84,71 @@ function ensureV3(raw: any, lang: string): IiifV3Manifest {
     result.rights = rightsVal;
   }
 
-  // サムネイル
-  if (raw.thumbnail) {
-    const thumbs = Array.isArray(raw.thumbnail) ? raw.thumbnail : [raw.thumbnail]
-    result.thumbnail = thumbs.map((t: any) => {
-      if (typeof t === 'string') return { id: t, type: 'Image' }
-      if (t['@id']) return { id: t['@id'], type: 'Image' }
-      return t
-    })
+  // サムネイル (マニフェストレベル)
+  if (normalizedCanvases?.[0]?.thumbnailUrl) {
+    result.thumbnail = [
+      {
+        id: normalizedCanvases[0].thumbnailUrl,
+        type: 'Image',
+        format: 'image/jpeg'
+      }
+    ];
   }
 
-  // 関連リンク
-  if (raw.homepage || raw.related) {
-    const pages = Array.isArray(raw.homepage || raw.related) ? (raw.homepage || raw.related) : [raw.homepage || raw.related]
-    result.homepage = pages.map((p: any) => {
-      if (typeof p === 'string') return { id: p, type: 'Text', label: toLangMap('Homepage'), format: 'text/html' }
-      return p
-    })
-  }
-
-  // 外部参照
-  if (raw.seeAlso) {
-    const see = Array.isArray(raw.seeAlso) ? raw.seeAlso : [raw.seeAlso]
-    result.seeAlso = see.map((s: any) => {
-      if (typeof s === 'string') return { id: s, type: 'Dataset' }
-      return s
-    })
-  }
-
-  // アイテム (Canvas) リストの変換
+  // アイテム (Canvas) リストの構築
+  // 元データの Canvas リストを取得
   const rawItems = raw.items || raw.sequences?.[0]?.canvases || [];
-  result.items = rawItems.map((c: any, cIdx: number) => {
-    // すでに V3 構造（items を持つ）なら一部流用、そうでなければ構築
-    const canvasId = c.id || c['@id'] || `canvas-${cIdx}`;
+  
+  // NormalizedCanvas を主としてループし、不足情報を rawItems から補完する
+  result.items = (normalizedCanvases || []).map((nc, cIdx) => {
+    const c = rawItems[cIdx] || {};
     const canvas: any = {
-      id: canvasId,
+      id: nc.id,
       type: 'Canvas',
-      label: toLangMap(c.label || String(cIdx + 1)),
-      width: c.width,
-      height: c.height,
+      label: toLangMap(nc.label),
+      width: nc.imageServiceUrl ? c.width : undefined, // ImageService があれば width/height はオプション
+      height: nc.imageServiceUrl ? c.height : undefined,
     };
 
+    // サムネイルの確実な付与
+    if (nc.thumbnailUrl) {
+      canvas.thumbnail = [
+        {
+          id: nc.thumbnailUrl,
+          type: 'Image',
+          format: 'image/jpeg'
+        }
+      ];
+      
+      // Image Service 情報があれば付与（一部のビューワーでギャラリー表示に必要）
+      if (nc.imageServiceUrl) {
+        canvas.thumbnail[0].service = [
+          {
+            id: nc.imageServiceUrl,
+            type: 'ImageService2',
+            profile: 'level1'
+          }
+        ];
+      }
+    }
+
+    // 画像アノテーションの構築
     if (c.items) {
+      // 既に V3 形式ならそのまま流用
       canvas.items = c.items;
     } else {
-      // V2 images -> V3 items (AnnotationPage)
+      // V2 からの変換
       const images = c.images || [];
       canvas.items = [
         {
-          id: `${canvasId}/page`,
+          id: `${nc.id}/page`,
           type: 'AnnotationPage',
           items: images.map((img: any, iIdx: number) => ({
-            id: img.id || img['@id'] || `${canvasId}/anno/${iIdx}`,
+            id: img.id || img['@id'] || `${nc.id}/anno/${iIdx}`,
             type: 'Annotation',
             motivation: 'painting',
             body: {
-              id: img.resource?.id || img.resource?.['@id'],
+              id: img.resource?.id || img.resource?.['@id'] || nc.imageServiceUrl + '/full/max/0/default.jpg',
               type: 'Image',
               format: img.resource?.format || 'image/jpeg',
               width: img.resource?.width,
@@ -157,9 +165,15 @@ function ensureV3(raw: any, lang: string): IiifV3Manifest {
                       type: img.resource.service['@context']?.includes('/3/context.json') ? 'ImageService3' : 'ImageService2',
                       profile: img.resource.service.profile
                     }]
-              ) : undefined
+              ) : (nc.imageServiceUrl ? [
+                {
+                  id: nc.imageServiceUrl,
+                  type: 'ImageService2',
+                  profile: 'level1'
+                }
+              ] : undefined)
             },
-            target: canvasId
+            target: nc.id
           }))
         }
       ];
@@ -181,10 +195,10 @@ export function exportV3(
   language: ExportLanguage,
 ): IiifV3Manifest {
   // 元の manifest.raw を V3 仕様にクリーンアップ/変換する
-  const base = ensureV3(manifest.raw, language)
+  const base = ensureV3(manifest.raw, language, manifest.canvases)
 
   // Range を構築
-  const structures: IiifV3Range[] = covers.map((cover, i) => {
+  const ranges: IiifV3Range[] = covers.map((cover, i) => {
     const start = cover.canvasIndex
     const end = covers[i + 1]?.canvasIndex ?? manifest.canvases.length
     const canvasIds = manifest.canvases
@@ -199,6 +213,9 @@ export function exportV3(
       items: canvasIds,
     }
   })
+
+  // Range リストをそのまま structures として使用する（以前は Table of Contents でラップしていたが、表示上の問題があるため廃止）
+  const structures: IiifV3Range[] = ranges
 
   return {
     ...base,
@@ -279,6 +296,7 @@ export async function copyManifestToClipboard(
   const json = JSON.stringify(exported, null, 2)
   await navigator.clipboard.writeText(json)
 }
+
 /**
  * 内部状態から学習データ用 JSON (iiif_ml_dataset 形式) を生成し、ダウンロードを起動する。
  */

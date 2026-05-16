@@ -5,7 +5,7 @@
  * ・サムネイルビュー / 分析結果ビュー（3ペイン）の切り替え
  */
 
-import { LayoutGrid, BarChart2, Sun, Moon, List, Maximize, HelpCircle, FileJson, Sparkles, Library, ArrowRight } from 'lucide-react'
+import { LayoutGrid, BarChart2, Sun, Moon, List, Maximize, HelpCircle, FileJson, Sparkles, Library, ArrowRight, BookOpen } from 'lucide-react'
 import { useManifestStore } from '@/store/manifest-store'
 import { useEffect, useState } from 'react'
 import { ManifestLoader } from '@/components/ManifestLoader'
@@ -15,6 +15,7 @@ import { AnalysisSettings } from '@/components/AnalysisSettings'
 import { LeftPane } from '@/components/ResultView/LeftPane'
 import { CenterPane } from '@/components/ResultView/CenterPane'
 import { RightPane } from '@/components/ResultView/RightPane'
+import { IiifViewerPane } from '@/components/IiifViewerPane'
 import { HelpModal } from '@/components/HelpModal'
 
 export default function App() {
@@ -110,6 +111,21 @@ export default function App() {
                       <span className="badge-cover ml-0.5">{detectedCovers.length}</span>
                     )}
                   </button>
+                  <button
+                    id="view-tab-viewer"
+                    onClick={() => setActiveView('viewer')}
+                    disabled={detectedCovers.length === 0 && inferenceStatus !== 'done'}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors ${
+                      activeView === 'viewer'
+                        ? 'bg-indigo-600/20 text-indigo-700 dark:text-indigo-300'
+                        : (detectedCovers.length === 0 && inferenceStatus !== 'done')
+                          ? 'text-slate-400 dark:text-slate-600 cursor-not-allowed'
+                          : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <BookOpen className="w-3 h-3" />
+                    ビューワー確認
+                  </button>
                 </div>
 
                 {activeView === 'result' && (
@@ -186,6 +202,11 @@ export default function App() {
           /* サムネイルビュー */
           <div className="h-full">
             <ThumbnailGrid />
+          </div>
+        ) : activeView === 'viewer' ? (
+          /* ビューワー確認 */
+          <div className="h-full">
+            <IiifViewerPane />
           </div>
         ) : (
           /* 分析結果ビュー（3ペイン） */

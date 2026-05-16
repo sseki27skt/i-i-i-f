@@ -90,7 +90,7 @@ export const MODEL_CONFIGS: Record<ModelId, ModelConfig> = {
 
 // ─────────────── UI 状態 ───────────────
 
-export type ActiveView = 'thumbnail' | 'result'
+export type ActiveView = 'thumbnail' | 'result' | 'viewer'
 
 export type InferenceStatus =
   | 'idle'
