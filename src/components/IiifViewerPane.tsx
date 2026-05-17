@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useManifestStore } from '@/store/manifest-store'
 import { exportV3, exportV2 } from '@/lib/iiif-exporter'
 
