@@ -20,7 +20,55 @@ let cancelled = false
 // ─────────────── 先行フェッチ管理 ───────────────
 /** 前処理済みデータの Promise を保持するマップ (canvasIndex -> Promise) */
 const prefetchMap = new Map<number, Promise<Float32Array>>()
-const MAX_PREFETCH_COUNT = 32 // 先読みする最大枚数
+const MAX_PREFETCH_COUNT = 8 // サーバーのレート制限を回避するため先読み枚数を抑制
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+async function fetchImageBufferWithFallback(
+  imageUrl?: string,
+  fallbackUrl?: string,
+): Promise<ArrayBuffer> {
+  const maxRetries = 2
+  let lastError: unknown
+
+  if (imageUrl) {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const resp = await fetch(imageUrl, { priority: 'high' } as any)
+        if (resp.status === 429 || resp.status === 503) {
+          if (attempt < maxRetries) {
+            await sleep(1200 * Math.pow(2, attempt) + Math.random() * 500)
+            continue
+          }
+        }
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
+        return await resp.arrayBuffer()
+      } catch (err) {
+        lastError = err
+        if (attempt < maxRetries) {
+          await sleep(600 * Math.pow(2, attempt))
+        }
+      }
+    }
+  }
+
+  if (fallbackUrl && fallbackUrl !== imageUrl) {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const resp = await fetch(fallbackUrl, { priority: 'high' } as any)
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
+        return await resp.arrayBuffer()
+      } catch (err) {
+        lastError = err
+        if (attempt < maxRetries) {
+          await sleep(800 * Math.pow(2, attempt))
+        }
+      }
+    }
+  }
+
+  throw lastError ?? new Error('Failed to fetch image')
+}
 
 // ─────────────── WebGPU リソース ───────────────
 let gpuDevice: GPUDevice | null = null
@@ -256,13 +304,18 @@ function triggerPrefetch() {
   if (cancelled) return
 
   // キュー全体から先行フェッチすべきアイテムを抽出
-  const itemsToPrefetch: { canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string }[] = []
+  const itemsToPrefetch: { canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string; fallbackUrl?: string }[] = []
   
   for (const msg of messageQueue) {
     if (msg.type === 'RUN_BATCH_INFERENCE') {
       itemsToPrefetch.push(...msg.items)
     } else if (msg.type === 'RUN_INFERENCE') {
-      itemsToPrefetch.push({ canvasIndex: msg.canvasIndex, imageData: msg.imageData, imageUrl: msg.imageUrl })
+      itemsToPrefetch.push({
+        canvasIndex: msg.canvasIndex,
+        imageData: msg.imageData,
+        imageUrl: msg.imageUrl,
+        fallbackUrl: msg.fallbackUrl,
+      })
     }
   }
 
@@ -280,16 +333,13 @@ function triggerPrefetch() {
 /**
  * 個別の画像をフェッチ・前処理して Promise を返す
  */
-async function prefetchItem(item: { canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string }): Promise<Float32Array> {
+async function prefetchItem(item: { canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string; fallbackUrl?: string }): Promise<Float32Array> {
   const config = currentModelId ? MODEL_CONFIGS[currentModelId] : MODEL_CONFIGS['mobilenet_v2']
   const inputSize = config.inputSize
 
   let data = item.imageData
-  if (!data && item.imageUrl) {
-    // 解析用のフェッチは優先度を高く設定
-    const resp = await fetch(item.imageUrl, { priority: 'high' } as any)
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
-    data = await resp.arrayBuffer()
+  if (!data && (item.imageUrl || item.fallbackUrl)) {
+    data = await fetchImageBufferWithFallback(item.imageUrl, item.fallbackUrl)
   }
   
   if (!data) throw new Error(`No image data for canvas ${item.canvasIndex}`)
@@ -346,7 +396,8 @@ async function handleMessage(msg: WorkerInMessage) {
     await handleInferenceBatch([{ 
       canvasIndex: msg.canvasIndex, 
       imageData: msg.imageData, 
-      imageUrl: msg.imageUrl 
+      imageUrl: msg.imageUrl,
+      fallbackUrl: msg.fallbackUrl,
     }])
   }
 
@@ -358,7 +409,7 @@ async function handleMessage(msg: WorkerInMessage) {
 /**
  * 複数枚の画像を一度に前処理し、バッチ推論として実行する
  */
-async function handleInferenceBatch(items: { canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string }[]) {
+async function handleInferenceBatch(items: { canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string; fallbackUrl?: string }[]) {
   if (!session || !currentModelId) {
     items.forEach(item => {
       const out: WorkerOutMessage = {
@@ -390,12 +441,9 @@ async function handleInferenceBatch(items: { canvasIndex: number; imageData?: Ar
 
       // 各画像の前処理を GPU 上で並列/順次実行
       await Promise.all(items.map(async (item, i) => {
-        // ... (画像データの取得)
         let imageData = item.imageData
-        if (!imageData && item.imageUrl) {
-          const resp = await fetch(item.imageUrl, { priority: 'high' } as any)
-          if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
-          imageData = await resp.arrayBuffer()
+        if (!imageData && (item.imageUrl || item.fallbackUrl)) {
+          imageData = await fetchImageBufferWithFallback(item.imageUrl, item.fallbackUrl)
         }
         if (!imageData) throw new Error(`No data for ${item.canvasIndex}`)
         

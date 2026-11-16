@@ -3,6 +3,8 @@ node_modules/
 .pnp
 .pnp.js
 dist/
+.serena
+
 
 # Python / ML
 __pycache__/

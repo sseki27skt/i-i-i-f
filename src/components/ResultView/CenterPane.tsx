@@ -5,11 +5,13 @@
  * 左ペインで選択した表紙へ自動スクロール。
  */
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useManifestStore } from '@/store/manifest-store'
 import type { NormalizedCanvas } from '@/types/app'
+import { getCanvasImageUrl } from '@/lib/iiif-parser'
 
 const CONTEXT_RADIUS = 4   // 前後コマ数
+const MAX_RETRIES = 3
 
 function ContextThumb({
   canvas,
@@ -21,10 +23,13 @@ function ContextThumb({
   onClick?: () => void
 }) {
   const imgRef = useRef<HTMLImageElement>(null)
+  const retryCountRef = useRef(0)
+  const retryTimerRef = useRef<number | null>(null)
 
   useEffect(() => {
     const img = imgRef.current
-    if (!img || img.src) return
+    if (!img) return
+    retryCountRef.current = 0
     const ob = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) {
@@ -35,7 +40,10 @@ function ContextThumb({
       { rootMargin: '100px' },
     )
     ob.observe(img)
-    return () => ob.disconnect()
+    return () => {
+      ob.disconnect()
+      if (retryTimerRef.current) window.clearTimeout(retryTimerRef.current)
+    }
   }, [canvas.thumbnailUrl])
 
   return (
@@ -63,6 +71,18 @@ function ContextThumb({
           onLoad={(e) => {
             const parent = (e.target as HTMLElement).parentElement
             parent?.querySelector('.skeleton')?.remove()
+          }}
+          onError={() => {
+            if (retryCountRef.current < MAX_RETRIES && canvas.thumbnailUrl) {
+              const delay = 1200 * Math.pow(2, retryCountRef.current) + Math.random() * 800
+              retryCountRef.current += 1
+              retryTimerRef.current = window.setTimeout(() => {
+                if (imgRef.current) {
+                  imgRef.current.src = ''
+                  imgRef.current.src = canvas.thumbnailUrl
+                }
+              }, delay)
+            }
           }}
         />
         {isTarget && (
@@ -141,6 +161,12 @@ function CoverBlock({
 
 function SingleCoverView({ coverIdx }: { coverIdx: number }) {
   const { manifest, detectedCovers } = useManifestStore()
+  const [useFallbackThumb, setUseFallbackThumb] = useState(false)
+
+  useEffect(() => {
+    setUseFallbackThumb(false)
+  }, [coverIdx, manifest?.id])
+
   if (!manifest) return null
 
   const cover = detectedCovers[coverIdx]
@@ -149,8 +175,10 @@ function SingleCoverView({ coverIdx }: { coverIdx: number }) {
   const targetIdx = cover.canvasIndex
   const canvas = manifest.canvases[targetIdx]
   
-  // 高解像度用のURL
-  const imgSrc = canvas.imageServiceUrl ? `${canvas.imageServiceUrl}/full/800,/0/default.jpg` : (canvas.thumbnailUrl ?? '')
+  // 高解像度用のURL（失敗時は thumbnailUrl にフォールバック）
+  const imgSrc = (!useFallbackThumb && canvas.imageServiceUrl)
+    ? getCanvasImageUrl(canvas, 800)
+    : (canvas.thumbnailUrl ?? '')
 
   return (
     <div className="flex flex-col h-full items-center justify-center bg-black/5 dark:bg-white/5 rounded-2xl border border-white/10 p-5 overflow-hidden">
@@ -166,7 +194,16 @@ function SingleCoverView({ coverIdx }: { coverIdx: number }) {
         </div>
       </div>
       <div className="flex-1 relative w-full overflow-hidden flex items-center justify-center bg-black/10 dark:bg-black/40 rounded-xl">
-        <img src={imgSrc} alt={canvas.label} className="absolute inset-0 w-full h-full object-contain p-2 drop-shadow-2xl" />
+        <img
+          src={imgSrc}
+          alt={canvas.label}
+          className="absolute inset-0 w-full h-full object-contain p-2 drop-shadow-2xl"
+          onError={() => {
+            if (!useFallbackThumb && canvas.thumbnailUrl && imgSrc !== canvas.thumbnailUrl) {
+              setUseFallbackThumb(true)
+            }
+          }}
+        />
       </div>
     </div>
   )

@@ -27,16 +27,73 @@ function extractLabel(langMap: LanguageMap | undefined, fallback = ''): string {
   return first?.[0] ?? fallback
 }
 
-/** IIIF Image API の URL からサムネイル URL を生成する */
-function makeThumbnailUrl(serviceId: string, size = 150): string {
+/**
+ * ImageリソースとService情報から、IIIF Image API の末尾ファイル名（"default.jpg" | "native.jpg" 等）を判定する
+ */
+function detectImageQualitySuffix(
+  resourceId?: string,
+  service?: { '@context'?: string; profile?: unknown; type?: string; '@type'?: string }
+): string {
+  // 1. resource['@id'] / body.id の末尾から実際の quality.format を抽出（例: .../full/0/native.jpg → native.jpg）
+  if (resourceId) {
+    const match = resourceId.match(/\/((?:default|native|color|grey|gray|bitonal)\.[a-zA-Z0-9]+)$/i)
+    if (match) {
+      return match[1]
+    }
+  }
+
+  // 2. service の @context / profile / type から Image API v1.x かどうかを判定
+  if (service) {
+    const ctx = service['@context'] ?? ''
+    const profileStr = typeof service.profile === 'string' ? service.profile : JSON.stringify(service.profile ?? '')
+    const typeStr = service.type ?? service['@type'] ?? ''
+
+    const isV1 =
+      ctx.includes('/image/1/') ||
+      ctx.includes('image-api/1.1') ||
+      profileStr.includes('library.stanford.edu/iiif/image-api') ||
+      profileStr.includes('/image/1/') ||
+      typeStr === 'ImageService1'
+
+    if (isV1) {
+      return 'native.jpg'
+    }
+  }
+
+  // 3. デフォルト（Image API v2 / v3）
+  return 'default.jpg'
+}
+
+/** IIIF Image API の URL から指定サイズの画像 URL を生成する */
+export function buildIiifImageUrl(
+  serviceId: string,
+  size: number | 'full' | 'max' = 150,
+  suffix = 'default.jpg',
+): string {
   const base = serviceId.replace(/\/$/, '')
-  return `${base}/full/${size},/0/default.jpg`
+  const sizeParam = typeof size === 'number' ? `${size},` : size
+  return `${base}/full/${sizeParam}/0/${suffix}`
+}
+
+/** NormalizedCanvas から指定サイズの画像 URL を取得する（Image Service がなければ thumbnailUrl にフォールバック） */
+export function getCanvasImageUrl(
+  canvas: Pick<NormalizedCanvas, 'imageServiceUrl' | 'imageQualitySuffix' | 'thumbnailUrl'>,
+  size: number | 'full' | 'max',
+): string {
+  if (!canvas.imageServiceUrl) {
+    return canvas.thumbnailUrl || ''
+  }
+  return buildIiifImageUrl(canvas.imageServiceUrl, size, canvas.imageQualitySuffix || 'default.jpg')
+}
+
+/** IIIF Image API の URL からサムネイル URL を生成する */
+function makeThumbnailUrl(serviceId: string, size = 150, suffix = 'default.jpg'): string {
+  return buildIiifImageUrl(serviceId, size, suffix)
 }
 
 /** 推論用 URL（フル解像度ではなく 224px 程度） */
-function makeInferenceUrl(serviceId: string, size = 224): string {
-  const base = serviceId.replace(/\/$/, '')
-  return `${base}/full/${size},/0/default.jpg`
+function makeInferenceUrl(serviceId: string, size = 224, suffix = 'default.jpg'): string {
+  return buildIiifImageUrl(serviceId, size, suffix)
 }
 
 // ─────────────── V2 パーサー ───────────────
@@ -52,21 +109,34 @@ function parseV2Canvas(canvas: IiifV2Canvas, index: number): NormalizedCanvas {
   // Image Service URL の取得
   let imageServiceUrl = ''
   const resource = canvas.images?.[0]?.resource
-  if (resource?.service?.['@id']) {
-    imageServiceUrl = resource.service['@id']
+  const rawService = Array.isArray(resource?.service) ? resource.service[0] : resource?.service
+  if (rawService?.['@id'] || (rawService as any)?.id) {
+    imageServiceUrl = rawService['@id'] || (rawService as any).id
   } else if (resource?.['@id']) {
     // Image API URL が直接指定されている場合
-    imageServiceUrl = resource['@id'].replace(/\/full\/.+$/, '')
+    const stripped = resource['@id'].replace(/\/full\/.+$/, '')
+    if (stripped !== resource['@id']) {
+      imageServiceUrl = stripped
+    }
   }
+
+  const imageQualitySuffix = detectImageQualitySuffix(resource?.['@id'], rawService as any)
 
   // サムネイル URL
   let thumbnailUrl = ''
   if (canvas.thumbnail) {
-    thumbnailUrl = typeof canvas.thumbnail === 'string'
-      ? canvas.thumbnail
-      : canvas.thumbnail['@id'] ?? ''
+    if (typeof canvas.thumbnail === 'string') {
+      thumbnailUrl = canvas.thumbnail
+    } else if (Array.isArray(canvas.thumbnail)) {
+      const firstThumb = canvas.thumbnail[0]
+      thumbnailUrl = typeof firstThumb === 'string' ? firstThumb : firstThumb?.['@id'] ?? ''
+    } else {
+      thumbnailUrl = canvas.thumbnail['@id'] ?? (canvas.thumbnail as any).id ?? ''
+    }
   } else if (imageServiceUrl) {
-    thumbnailUrl = makeThumbnailUrl(imageServiceUrl)
+    thumbnailUrl = makeThumbnailUrl(imageServiceUrl, 150, imageQualitySuffix)
+  } else if (resource?.['@id']) {
+    thumbnailUrl = resource['@id']
   }
 
   return {
@@ -75,8 +145,9 @@ function parseV2Canvas(canvas: IiifV2Canvas, index: number): NormalizedCanvas {
     label,
     thumbnailUrl,
     imageServiceUrl: imageServiceUrl || '',
+    imageQualitySuffix,
     inferenceUrl: imageServiceUrl
-      ? makeInferenceUrl(imageServiceUrl)
+      ? makeInferenceUrl(imageServiceUrl, 224, imageQualitySuffix)
       : thumbnailUrl,
   }
 }
@@ -101,11 +172,17 @@ function parseV3Canvas(canvas: IiifV3Canvas, index: number): NormalizedCanvas {
   let imageServiceUrl = ''
   const body = canvas.items?.[0]?.items?.[0]?.body
   const bodyItem = Array.isArray(body) ? body[0] : body
-  if (bodyItem?.service?.[0]?.id) {
-    imageServiceUrl = bodyItem.service[0].id
+  const rawService = Array.isArray(bodyItem?.service) ? bodyItem.service[0] : (bodyItem?.service as any)
+  if (rawService?.id || rawService?.['@id']) {
+    imageServiceUrl = rawService.id || rawService['@id']
   } else if (bodyItem?.id) {
-    imageServiceUrl = bodyItem.id.replace(/\/full\/.+$/, '')
+    const stripped = bodyItem.id.replace(/\/full\/.+$/, '')
+    if (stripped !== bodyItem.id) {
+      imageServiceUrl = stripped
+    }
   }
+
+  const imageQualitySuffix = detectImageQualitySuffix(bodyItem?.id, rawService)
 
   // サムネイル
   let thumbnailUrl = ''
@@ -113,7 +190,9 @@ function parseV3Canvas(canvas: IiifV3Canvas, index: number): NormalizedCanvas {
   if (thumb?.id) {
     thumbnailUrl = thumb.id
   } else if (imageServiceUrl) {
-    thumbnailUrl = makeThumbnailUrl(imageServiceUrl)
+    thumbnailUrl = makeThumbnailUrl(imageServiceUrl, 150, imageQualitySuffix)
+  } else if (bodyItem?.id) {
+    thumbnailUrl = bodyItem.id
   }
 
   return {
@@ -122,8 +201,9 @@ function parseV3Canvas(canvas: IiifV3Canvas, index: number): NormalizedCanvas {
     label,
     thumbnailUrl,
     imageServiceUrl: imageServiceUrl || '',
+    imageQualitySuffix,
     inferenceUrl: imageServiceUrl
-      ? makeInferenceUrl(imageServiceUrl)
+      ? makeInferenceUrl(imageServiceUrl, 224, imageQualitySuffix)
       : thumbnailUrl,
   }
 }

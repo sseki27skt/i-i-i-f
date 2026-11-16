@@ -18,6 +18,8 @@ export interface NormalizedCanvas {
   thumbnailUrl: string
   /** 推論用高解像度画像のベース URL（IIIF Image API ルート） */
   imageServiceUrl: string
+  /** IIIF Image API の末尾ファイル名（"default.jpg" | "native.jpg" など） */
+  imageQualitySuffix?: string
   /** 推論用 224px 画像のURL */
   inferenceUrl: string
 }
@@ -112,8 +114,8 @@ export type NmsPriority = 'first' | 'last' | 'max'
 /** Main → Worker */
 export type WorkerInMessage =
   | { type: 'LOAD_MODEL'; modelId: ModelId }
-  | { type: 'RUN_INFERENCE'; canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string }
-  | { type: 'RUN_BATCH_INFERENCE'; items: { canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string }[] }
+  | { type: 'RUN_INFERENCE'; canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string; fallbackUrl?: string }
+  | { type: 'RUN_BATCH_INFERENCE'; items: { canvasIndex: number; imageData?: ArrayBuffer; imageUrl?: string; fallbackUrl?: string }[] }
   | { type: 'CANCEL' }
 
 /** Worker → Main */

@@ -2,11 +2,14 @@
  * ThumbnailGrid.tsx — react-virtuoso VirtuosoGrid による仮想スクロールグリッド
  */
 
-import { useRef, useCallback, useState, useMemo } from 'react'
+import { useRef, useCallback, useState, useMemo, useEffect } from 'react'
 import { useManifestStore } from '@/store/manifest-store'
 import type { NormalizedCanvas } from '@/types/app'
+import { getCanvasImageUrl } from '@/lib/iiif-parser'
 import { VirtuosoGrid } from 'react-virtuoso'
 import type { ListRange } from 'react-virtuoso'
+
+const MAX_RETRIES = 3
 
 // ─────────────── 個別サムネイルアイテム ───────────────
 
@@ -33,6 +36,47 @@ function ThumbnailItem({
 }: ThumbnailItemProps) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [errored, setErrored] = useState(false)
+  const [retryCount, setRetryCount] = useState(0)
+  const [useFallbackThumb, setUseFallbackThumb] = useState(false)
+  const retryTimerRef = useRef<number | null>(null)
+
+  const primarySrc = (size <= 120 || isRunning || !canvas.imageServiceUrl || useFallbackThumb)
+    ? (canvas.thumbnailUrl || '')
+    : getCanvasImageUrl(canvas, size <= 180 ? 240 : 400)
+
+  // リトライ時は key (`${imgSrc}-${retryCount}`) の更新により <img> 要素を再マウントして再取得させる
+  const imgSrc = primarySrc
+
+  useEffect(() => {
+    setIsLoaded(false)
+    setErrored(false)
+    setRetryCount(0)
+    setUseFallbackThumb(false)
+    return () => {
+      if (retryTimerRef.current) window.clearTimeout(retryTimerRef.current)
+    }
+  }, [canvas.id, size])
+
+  const handleImageError = () => {
+    // 高解像度 Image API URL で失敗し、かつ別の thumbnailUrl がある場合はまず thumbnailUrl にフォールバック
+    if (!useFallbackThumb && canvas.thumbnailUrl && primarySrc !== canvas.thumbnailUrl) {
+      setUseFallbackThumb(true)
+      setRetryCount(0)
+      return
+    }
+
+    // 指数バックオフ＋ランダムジッターでリトライ（レート制限 429/503 対策）
+    if (retryCount < MAX_RETRIES) {
+      const delay = 1200 * Math.pow(2, retryCount) + Math.random() * 800
+      if (retryTimerRef.current) window.clearTimeout(retryTimerRef.current)
+      retryTimerRef.current = window.setTimeout(() => {
+        setRetryCount((prev) => prev + 1)
+      }, delay)
+    } else {
+      setIsLoaded(true)
+      setErrored(true)
+    }
+  }
 
   const height = Math.round(size * 1.4)
 
@@ -75,17 +119,15 @@ function ThumbnailItem({
       {!isLoaded && <div className="skeleton absolute inset-0" />}
 
       {/* サムネイル画像 */}
-      {!errored ? (
+      {!errored && imgSrc ? (
         <img
-          src={(size <= 120 || isRunning || !canvas.imageServiceUrl) ? (canvas.thumbnailUrl || '') : `${canvas.imageServiceUrl}/full/${size <= 180 ? 240 : 400},/0/default.jpg`}
+          key={`${imgSrc}-${retryCount}`}
+          src={imgSrc}
           alt={canvas.label}
           className={`absolute inset-0 w-full h-full object-contain p-1 transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           loading="lazy"
           onLoad={() => setIsLoaded(true)}
-          onError={() => {
-            setIsLoaded(true)
-            setErrored(true)
-          }}
+          onError={handleImageError}
         />
       ) : (
         <span className="absolute inset-0 flex items-center justify-center text-xs" style={{ color: 'var(--color-text-muted)' }}>

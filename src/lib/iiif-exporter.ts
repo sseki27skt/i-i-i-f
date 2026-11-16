@@ -6,6 +6,7 @@
 
 import type { NormalizedManifest, NormalizedCanvas, DetectedCover } from '@/types/app'
 import type { ExportVersion, ExportLanguage } from '@/types/app'
+import { getCanvasImageUrl } from '@/lib/iiif-parser'
 import type {
   IiifV2Manifest, IiifV2Range,
   IiifV3Manifest, IiifV3Range,
@@ -125,7 +126,7 @@ function ensureV3(raw: any, lang: string, normalizedCanvases?: NormalizedCanvas[
         canvas.thumbnail[0].service = [
           {
             id: nc.imageServiceUrl,
-            type: 'ImageService2',
+            type: nc.imageQualitySuffix === 'native.jpg' ? 'ImageService1' : 'ImageService2',
             profile: 'level1'
           }
         ];
@@ -148,7 +149,7 @@ function ensureV3(raw: any, lang: string, normalizedCanvases?: NormalizedCanvas[
             type: 'Annotation',
             motivation: 'painting',
             body: {
-              id: img.resource?.id || img.resource?.['@id'] || nc.imageServiceUrl + '/full/max/0/default.jpg',
+              id: img.resource?.id || img.resource?.['@id'] || getCanvasImageUrl(nc, 'full'),
               type: 'Image',
               format: img.resource?.format || 'image/jpeg',
               width: img.resource?.width,
@@ -157,18 +158,18 @@ function ensureV3(raw: any, lang: string, normalizedCanvases?: NormalizedCanvas[
                 Array.isArray(img.resource.service) 
                   ? img.resource.service.map((s: any) => ({
                       id: s.id || s['@id'],
-                      type: s['@context']?.includes('/3/context.json') ? 'ImageService3' : 'ImageService2',
+                      type: s['@context']?.includes('/3/context.json') ? 'ImageService3' : (nc.imageQualitySuffix === 'native.jpg' ? 'ImageService1' : 'ImageService2'),
                       profile: s.profile
                     }))
                   : [{
                       id: img.resource.service.id || img.resource.service['@id'],
-                      type: img.resource.service['@context']?.includes('/3/context.json') ? 'ImageService3' : 'ImageService2',
+                      type: img.resource.service['@context']?.includes('/3/context.json') ? 'ImageService3' : (nc.imageQualitySuffix === 'native.jpg' ? 'ImageService1' : 'ImageService2'),
                       profile: img.resource.service.profile
                     }]
               ) : (nc.imageServiceUrl ? [
                 {
                   id: nc.imageServiceUrl,
-                  type: 'ImageService2',
+                  type: nc.imageQualitySuffix === 'native.jpg' ? 'ImageService1' : 'ImageService2',
                   profile: 'level1'
                 }
               ] : undefined)
@@ -308,9 +309,7 @@ export function downloadTrainingDataJson(
 
   const dataset = manifest.canvases.map((canvas) => {
     // 画像URLの構築 (Image Service がある場合はフルサイズ、ない場合はそのまま)
-    const imageUrl = canvas.imageServiceUrl
-      ? `${canvas.imageServiceUrl.replace(/\/$/, '')}/full/full/0/default.jpg`
-      : canvas.thumbnailUrl
+    const imageUrl = getCanvasImageUrl(canvas, 'full')
 
     return {
       id: canvas.id,

@@ -201,6 +201,7 @@ export function AnalysisSettings() {
           canvasIndex: c.index,
           imageData: imageCacheMap.get(c.index),
           imageUrl: imageCacheMap.get(c.index) ? undefined : c.inferenceUrl,
+          fallbackUrl: imageCacheMap.get(c.index) ? undefined : c.thumbnailUrl,
         }))
 
         worker.postMessage({

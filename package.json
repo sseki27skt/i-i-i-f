@@ -11,21 +11,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "universalviewer": "^3.1.2",
     "lucide-react": "^0.577.0",
     "onnxruntime-web": "^1.24.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-virtuoso": "^4.18.3",
+    "universalviewer": "^3.0.25",
     "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
-    "@webgpu/types": "^0.1.40",
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.3.4",
+    "@webgpu/types": "^0.1.40",
     "autoprefixer": "^10.4.27",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -34,7 +34,7 @@
     "postcss": "^8.5.8",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.7.0",
-    "typescript-eslint": "^8.56.1",
+    "typescript-eslint": "^7.3.1",
     "vite": "^6.0.0"
   }
 }
